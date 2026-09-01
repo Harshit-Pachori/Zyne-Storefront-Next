@@ -206,7 +206,7 @@ export async function action(formData: FormData, context: ActionFunctionArgs['co
     // Save address to customer profile for registered users (if address is new) — best-effort
     try {
         const auth = getAuth(context);
-        if (auth?.customerId) {
+        if (auth?.customerId && isRegisteredCustomer(context)) {
             const customer = await getCurrentCustomer(context);
             const existingAddresses = customer?.addresses ?? [];
             const existingKeys = new Set(existingAddresses.map((addr) => getAddressKey(addr)));

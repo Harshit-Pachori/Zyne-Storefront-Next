@@ -97,6 +97,10 @@ import { correlationContext } from '@/lib/correlation';
 import { AppToaster } from '@/components/toast';
 import { TrackingConsentBanner } from '@/components/tracking-consent-banner';
 import CimulateAgent, { isCimulateEnabled } from '@/components/cimulate';
+import EmbeddedMessagingAgent, {
+    isEmbeddedMessagingEnabled,
+    validateEmbeddedMessagingConfig,
+} from '@/components/embedded-messaging';
 
 // Hooks
 import { useExecutePendingAction } from '@/hooks/use-execute-pending-action';
@@ -754,6 +758,20 @@ export default function App({
             {isCimulateEnabled(appConfig.cimulateAgent?.enabled) && (
                 <CimulateAgent cimulateConfiguration={appConfig.cimulateAgent} />
             )}
+            {isEmbeddedMessagingEnabled(appConfig.embeddedMessaging?.enabled) &&
+                validateEmbeddedMessagingConfig(appConfig.embeddedMessaging) && (
+                    <EmbeddedMessagingAgent
+                        config={appConfig.embeddedMessaging}
+                        hiddenFields={{
+                            SiteId: site.id,
+                            UserLocale: locale.id,
+                            Currency: currency,
+                            ...(clientAuth?.usid ? { UsId: clientAuth.usid } : {}),
+                            ...(basketSnapshot?.basketId ? { BasketId: basketSnapshot.basketId } : {}),
+                            DomainURL: typeof window !== 'undefined' ? window.location.origin : '',
+                        }}
+                    />
+                )}
         </ComposeProviders>
     );
 }

@@ -114,6 +114,27 @@ export type AppConfig = {
         routingAttributes?: Record<string, unknown>;
         isDevelopment?: string;
     };
+    /**
+     * Native Salesforce Embedded Messaging (MIAW — "Messaging for In-App and Web") widget.
+     * Free alternative to `cimulateAgent` — no third-party vendor script required, uses the
+     * bootstrap script Salesforce generates from Setup > Embedded Service Deployments (channel
+     * type "Web"). See `src/components/embedded-messaging/README.md`.
+     */
+    embeddedMessaging?: {
+        enabled: string | boolean;
+        /** e.g. '00Dxx0000000001' */
+        orgId: string;
+        /** Deployment developer name, e.g. 'Customer_Support_Service' */
+        esDeveloperName: string;
+        /** Experience Cloud site base URL hosting the deployment, e.g. 'https://your-org.my.site.com/ESWXxx' */
+        siteUrl: string;
+        /** SCRT2 messaging endpoint, e.g. 'https://your-org.my.salesforce-scrt.com' */
+        scrt2Url: string;
+        /** Full bootstrap.min.js URL from the deployment's generated snippet */
+        bootstrapScriptUrl: string;
+        /** BCP-47/Salesforce locale code, e.g. 'en_US' */
+        language?: string;
+    };
     defaultSiteId: string;
     development: {
         enableDevtools: boolean;

@@ -94,6 +94,7 @@ Every variable the storefront recognizes is listed here. Set the **Required** ro
 | `PUBLIC__security__turnstile__enabled` | `false` | Turnstile bot protection |
 | `PUBLIC__security__turnstile__sites` | — | Turnstile per-site configuration |
 | `PUBLIC__app__cimulateAgent` | disabled | Commerce Client (Cimulate) messaging widget config (JSON string) |
+| `PUBLIC__app__embeddedMessaging` | disabled | Native Salesforce Embedded Messaging (MIAW) widget config (JSON string) |
 
 ### Optional non-`PUBLIC__` runtime/deploy variables
 
@@ -633,6 +634,14 @@ See [README-TURNSTILE.md](./README-TURNSTILE.md) and `e2e/feature-specs/checkout
 ```bash
 # PUBLIC__app__cimulateAgent='{"enabled":true,"provider":"commerce-client","commerceClientScriptSourceUrl":"https://...","scrt2Url":"https://...","salesforceOrgId":"...","esDeveloperName":"..."}'
 ```
+
+### Embedded Messaging (native Salesforce MIAW)
+
+```bash
+# PUBLIC__app__embeddedMessaging='{"enabled":true,"orgId":"00Dxx0000000001","esDeveloperName":"...","siteUrl":"https://your-org.my.site.com/ESWxxx","scrt2Url":"https://your-org.my.salesforce-scrt.com","bootstrapScriptUrl":"https://your-org.my.site.com/ESWxxx/assets/js/bootstrap.min.js","language":"en_US"}'
+```
+
+See [src/components/embedded-messaging/README.md](../src/components/embedded-messaging/README.md) for Salesforce-side setup.
 
 Set as a single JSON string. Required fields: `enabled`, `commerceClientScriptSourceUrl`, `scrt2Url`, `salesforceOrgId`, `esDeveloperName`. See `src/components/cimulate/README.md` for setup.
 
