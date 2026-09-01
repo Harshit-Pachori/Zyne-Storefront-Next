@@ -11,7 +11,7 @@
         "noFilterOptionsAvailable": "Aucune option de filtrage n’est disponible."
     },
     "common": {
-        "defaultSiteName": "Storefront Next : Market Street",
+        "defaultSiteName": "Storefront Next : Zyne",
         "loading": "Chargement en cours",
         "loadingMore": "Chargement supplémentaire...",
         "product": "le produit",
@@ -1124,7 +1124,7 @@
             }
         },
         "meta": {
-            "title": "Storefront Next : Market Street",
+            "title": "Storefront Next : Zyne",
             "description": "Magasin de mode nouvelle génération"
         },
         "featuredProducts": {
@@ -1133,7 +1133,7 @@
         },
         "categoryGrid": {
             "title": "Du style pour la vraie vie",
-            "description": "Chez Market Street, nous pensons que la mode doit être décontractée, authentique et accessible. Nos collections sont conçues pour la personne moderne qui apprécie la qualité, la polyvalence et le style intemporel.",
+            "description": "Chez Zyne, nous pensons que la mode doit être décontractée, authentique et accessible. Nos collections sont conçues pour la personne moderne qui apprécie la qualité, la polyvalence et le style intemporel.",
             "shopNowButton": "Acheter maintenant"
         },
         "featuredContent": {
@@ -1151,7 +1151,7 @@
             },
             "styleForRealLife": {
                 "title": "Du style pour la vraie vie",
-                "description": "Chez Market Street, nous pensons que la mode doit être décontractée, authentique et accessible. Nos collections sont conçues pour la personne moderne qui apprécie la qualité, la polyvalence et le style intemporel.\n\nDécouvrez des pièces qui bougent avec vous, s’adaptent à votre vie et deviennent la base d’une garde-robe fonctionnelle, tous les jours, partout."
+                "description": "Chez Zyne, nous pensons que la mode doit être décontractée, authentique et accessible. Nos collections sont conçues pour la personne moderne qui apprécie la qualité, la polyvalence et le style intemporel.\n\nDécouvrez des pièces qui bougent avec vous, s’adaptent à votre vie et deviennent la base d’une garde-robe fonctionnelle, tous les jours, partout."
             }
         }
     },
@@ -1197,7 +1197,7 @@
         "section": {
             "ourGoal": {
                 "title": "Conçue pour le mouvement. Conçue pour la vie de tous les jours.",
-                "content": "Inspirée par la culture urbaine et l’énergie du mouvement, Market Street a été créée pour relier la performance, le style et les essentiels du quotidien en une seule expérience fluide. Nous pensons que les bons produits doivent bouger avec vous, de la rue au studio, du travail au week-end.\nCe qui a commencé comme une vision visant à simplifier la façon dont les gens vivent le retail mode et lifestyle a évolué pour devenir une marque axée sur la clarté, l’accessibilité et le design intelligent. Chaque collection est conçue pour offrir polyvalence, durabilité et un charme intemporel."
+                "content": "Inspirée par la culture urbaine et l’énergie du mouvement, Zyne a été créée pour relier la performance, le style et les essentiels du quotidien en une seule expérience fluide. Nous pensons que les bons produits doivent bouger avec vous, de la rue au studio, du travail au week-end.\nCe qui a commencé comme une vision visant à simplifier la façon dont les gens vivent le retail mode et lifestyle a évolué pour devenir une marque axée sur la clarté, l’accessibilité et le design intelligent. Chaque collection est conçue pour offrir polyvalence, durabilité et un charme intemporel."
             },
             "ourVision": {
                 "title": "Notre vision",
@@ -1213,7 +1213,7 @@
             },
             "ourTeam": {
                 "title": "Une marque mondiale, une âme locale",
-                "content": "Market Street est née de l’idée qu’un style élégant ne devrait pas sembler inaccessible. Nous mêlons une inspiration mondiale avec un état d’esprit local, reliant la culture, la performance et le lifestyle en une seule expression fluide.\nDu développement de produits à l’expérience numérique, tout ce que nous faisons est guidé par un seul principe :\nrendre le commerce naturel."
+                "content": "Zyne est née de l’idée qu’un style élégant ne devrait pas sembler inaccessible. Nous mêlons une inspiration mondiale avec un état d’esprit local, reliant la culture, la performance et le lifestyle en une seule expression fluide.\nDu développement de produits à l’expérience numérique, tout ce que nous faisons est guidé par un seul principe :\nrendre le commerce naturel."
             }
         },
         "contact": {

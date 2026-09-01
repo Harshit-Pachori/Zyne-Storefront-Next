@@ -85,7 +85,7 @@ export async function action({ request, context }: Route.ActionArgs) {
             const auth = getAuth(context);
             const customerId = auth.customerId;
 
-            if (customerId) {
+            if (customerId && auth.userType === 'registered') {
                 try {
                     const customerProfile = await getCustomerProfileForCheckout(context, customerId);
                     if (!customerProfile) {
@@ -311,8 +311,10 @@ export async function action({ request, context }: Route.ActionArgs) {
             (updatedBasket.customerInfo as { phone?: string } | undefined)?.phone ||
             (order.customerInfo as { phone?: string } | undefined)?.phone;
 
-        // Save checkout information to customer profile
-        if (auth.customerId) {
+        // Save checkout information to customer profile — guest customers cannot have
+        // a customer profile, so attempting this for guests 401s and trips the
+        // auth-recovery machinery after the order is already placed.
+        if (auth.customerId && auth.userType === 'registered') {
             const customerId = auth.customerId;
 
             let profileSnapshot: CustomerProfile | null = null;

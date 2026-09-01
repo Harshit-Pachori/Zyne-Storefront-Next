@@ -26,6 +26,11 @@ import { Button } from '@/components/ui/button';
 import { SparklesIcon } from '@/components/icons';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import { openAgentWidget, isCimulateEnabled, validateCimulateConfig } from '@/components/cimulate';
+import {
+    openEmbeddedMessaging,
+    isEmbeddedMessagingEnabled,
+    validateEmbeddedMessagingConfig,
+} from '@/components/embedded-messaging';
 import { UITarget } from '@/targets/ui-target';
 import { Component } from '@/lib/decorators/component';
 import { RegionDefinition } from '@/lib/decorators';
@@ -68,10 +73,16 @@ export default function Header({
     const { t } = useTranslation('header');
     const headerRef = useRef<HTMLElement>(null);
     const config = useConfig();
-    const showChat =
+    const showCimulateChat =
         variant === 'full' &&
         isCimulateEnabled(config.cimulateAgent?.enabled) &&
         validateCimulateConfig(config.cimulateAgent);
+    const showEmbeddedMessagingChat =
+        variant === 'full' &&
+        !showCimulateChat &&
+        isEmbeddedMessagingEnabled(config.embeddedMessaging?.enabled) &&
+        validateEmbeddedMessagingConfig(config.embeddedMessaging);
+    const showChat = showCimulateChat || showEmbeddedMessagingChat;
     const updateHeaderHeight = useCallback(() => {
         if (headerRef.current) {
             const height = `${headerRef.current.offsetHeight}px`;
@@ -148,7 +159,7 @@ export default function Header({
                                 variant="ghost"
                                 size="icon"
                                 className="cursor-pointer lg:px-4 px-1 text-header-foreground hover:bg-transparent hover:opacity-50 transition-opacity"
-                                onClick={() => openAgentWidget()}
+                                onClick={() => (showCimulateChat ? openAgentWidget() : openEmbeddedMessaging())}
                                 aria-label={t('openChat')}>
                                 <SparklesIcon />
                             </Button>

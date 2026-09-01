@@ -11,7 +11,7 @@
         "noFilterOptionsAvailable": "Ingen filteralternativer tilgjengelig."
     },
     "common": {
-        "defaultSiteName": "Butikkforside Neste: Market Street",
+        "defaultSiteName": "Butikkforside Neste: Zyne",
         "loading": "Laster inn",
         "loadingMore": "Laster inn mer ...",
         "product": "produktet",
@@ -1119,7 +1119,7 @@
             }
         },
         "meta": {
-            "title": "Butikkforside Neste: Market Street",
+            "title": "Butikkforside Neste: Zyne",
             "description": "Neste generasjons motebutikk"
         },
         "featuredProducts": {
@@ -1128,7 +1128,7 @@
         },
         "categoryGrid": {
             "title": "Stil for det virkelige liv",
-            "description": "Hos Market Street mener vi at mote skal være uanstrengt, autentisk og tilgjengelig. Kolleksjonene våre er designet for det moderne mennesket som setter pris på kvalitet, allsidighet og tidløs stil.",
+            "description": "Hos Zyne mener vi at mote skal være uanstrengt, autentisk og tilgjengelig. Kolleksjonene våre er designet for det moderne mennesket som setter pris på kvalitet, allsidighet og tidløs stil.",
             "shopNowButton": "Handle nå"
         },
         "featuredContent": {
@@ -1146,7 +1146,7 @@
             },
             "styleForRealLife": {
                 "title": "Stil for det virkelige liv",
-                "description": "Hos Market Street mener vi at mote skal være uanstrengt, autentisk og tilgjengelig. Kolleksjonene våre er designet for det moderne mennesket som setter pris på kvalitet, allsidighet og tidløs stil.\n\nOppdag plagg som beveger seg med deg, tilpasser seg livet ditt og blir grunnlaget for en garderobe som fungerer – hver eneste dag, overalt."
+                "description": "Hos Zyne mener vi at mote skal være uanstrengt, autentisk og tilgjengelig. Kolleksjonene våre er designet for det moderne mennesket som setter pris på kvalitet, allsidighet og tidløs stil.\n\nOppdag plagg som beveger seg med deg, tilpasser seg livet ditt og blir grunnlaget for en garderobe som fungerer – hver eneste dag, overalt."
             }
         }
     },
@@ -1191,7 +1191,7 @@
         "section": {
             "ourGoal": {
                 "title": "Bygget for bevegelse. Designet for hverdagen.",
-                "content": "Market Street er inspirert av urban kultur og bevegelsesenergi, og ble skapt for å forene ytelse, stil og hverdagsutstyr i én sømløs opplevelse. Vi mener at gode produkter skal følge med deg – fra gateplanet til studioet, fra jobb til helg.\nDet som startet som en visjon om å forenkle måten folk opplever mote- og livsstilshandel på, har utviklet seg til et varemerke med fokus på tydelighet, tilgjengelighet og smart design. Hver kolleksjon er satt sammen for å levere allsidighet, holdbarhet og tidløs appell."
+                "content": "Zyne er inspirert av urban kultur og bevegelsesenergi, og ble skapt for å forene ytelse, stil og hverdagsutstyr i én sømløs opplevelse. Vi mener at gode produkter skal følge med deg – fra gateplanet til studioet, fra jobb til helg.\nDet som startet som en visjon om å forenkle måten folk opplever mote- og livsstilshandel på, har utviklet seg til et varemerke med fokus på tydelighet, tilgjengelighet og smart design. Hver kolleksjon er satt sammen for å levere allsidighet, holdbarhet og tidløs appell."
             },
             "ourVision": {
                 "title": "Vår visjon",
@@ -1207,7 +1207,7 @@
             },
             "ourTeam": {
                 "title": "Et globalt varemerke, en sjel på gateplan",
-                "content": "Market Street ble født ut fra ideen om at god stil ikke skal føles uoppnåelig. Vi kombinerer global inspirasjon med et tankesett på gateplan, og kobler kultur, produktivitet og livsstil til ett flytende uttrykk.\nFra utvikling av produkter til digitale opplevelser, alt vi gjør styres av ett prinsipp:\nFå handel til å kjennes naturlig."
+                "content": "Zyne ble født ut fra ideen om at god stil ikke skal føles uoppnåelig. Vi kombinerer global inspirasjon med et tankesett på gateplan, og kobler kultur, produktivitet og livsstil til ett flytende uttrykk.\nFra utvikling av produkter til digitale opplevelser, alt vi gjør styres av ett prinsipp:\nFå handel til å kjennes naturlig."
             }
         },
         "contact": {
