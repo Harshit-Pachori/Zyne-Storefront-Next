@@ -473,30 +473,12 @@ export default defineConfig<Config>(
         },
       },
       development: { enableDevtools: true, hotReload: true, strictMode: true },
-      cimulateAgent: {
-        enabled: false,
-        commerceClientScriptSourceUrl: "URL_Redacted",
-        scrt2Url:
-          "https://orgfarm-a3ef1014a8-dev-ed.develop.my.salesforce-scrt.com",
-        salesforceOrgId: "00Dfj00000IxfuR",
-        esDeveloperName: "Zyne_Headless_Storefront",
-        commerceClientElementId: "cimulate-messaging-container",
-        commerceClientDisplayMode: "panel" as const,
-      },
+      cimulateAgent: JSON.parse(process.env.PUBLIC__app__cimulateAgent || "{}"),
       // Free, native alternative to cimulateAgent above — no third-party vendor
       // script required. See src/components/embedded-messaging/README.md.
-      embeddedMessaging: {
-        enabled: true,
-        orgId: "00Dfj00000IxfuR",
-        esDeveloperName: "Customer_Support_Service",
-        siteUrl:
-          "https://orgfarm-a3ef1014a8-dev-ed.develop.my.site.com/ESWCustomerSupportServi1787744978578",
-        scrt2Url:
-          "https://orgfarm-a3ef1014a8-dev-ed.develop.my.salesforce-scrt.com",
-        bootstrapScriptUrl:
-          "https://orgfarm-a3ef1014a8-dev-ed.develop.my.site.com/ESWCustomerSupportServi1787744978578/assets/js/bootstrap.min.js",
-        language: "en_US",
-      },
+      embeddedMessaging: JSON.parse(
+        process.env.PUBLIC__app__embeddedMessaging || "{}",
+      ),
       extension: generatedExtensionConfig,
       serverExtension: generatedServerExtensionConfig,
       url: {
