@@ -25,6 +25,7 @@ import { useSearchSuggestions } from '@/hooks/use-search-suggestions';
 import { useTransformSearchSuggestions } from '@/hooks/use-transform-search-suggestions';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import { getSessionJSONItem, setSessionJSONItem, clearSessionJSONItem } from '@/lib/utils';
+import { searchUrlBuilder } from '@/lib/url';
 
 import { UITarget } from '@/targets/ui-target';
 
@@ -129,7 +130,7 @@ export default function SearchBar(): ReactElement {
                 const searchQuery = inputRef.current.value.trim();
                 saveRecentSearch(searchQuery);
                 setShowSuggestions(false);
-                void navigate(`/search?q=${encodeURIComponent(searchQuery)}`, {
+                void navigate(searchUrlBuilder(searchQuery), {
                     state: { query: searchQuery },
                 });
             }

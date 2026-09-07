@@ -20,6 +20,7 @@ import generatedExtensionConfig from "./src/extensions/config/index";
 // the AST validator forbids process.env, so server-only secrets must be read from process.env
 // in a route handler.
 import generatedServerExtensionConfig from "./src/extensions/config/server";
+import { defaultCspDirectives } from "@salesforce/storefront-next-runtime/security";
 
 const DIS_DEFAULT_HOST = "https://edge.disstg.commercecloud.salesforce.com";
 
@@ -534,7 +535,17 @@ export default defineConfig<Config>(
                 | "disabled") || undefined,
           },
         },
-        headers: defaultSecurityHeaders,
+        headers: {
+        ...defaultSecurityHeaders,
+        csp: {
+          directives: defaultCspDirectives,
+        },
+      },
+      },
+      algolia: {
+        appId: "",
+        searchApiKey: "",
+        indexName: "",
       },
     },
   },

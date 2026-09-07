@@ -63,7 +63,6 @@ function LocationKeyedSearch() {
     const location = useLocation();
     return <Search key={`${location.pathname}${location.search}`} />;
 }
-
 export default function Header({
     children,
     beforeHeader,

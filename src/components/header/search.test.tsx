@@ -212,7 +212,9 @@ describe('SearchBar Component', () => {
             fireEvent.change(input, { target: { value: 'test query' } });
             fireEvent.submit(form);
 
-            expect(mockNavigate).toHaveBeenCalledWith('/search?q=test%20query', { state: { query: 'test query' } });
+            expect(mockNavigate).toHaveBeenCalledWith('/search?q=test%20query', {
+                state: { query: 'test query' },
+            });
         });
 
         it('should prevent default form submission', () => {

@@ -44,6 +44,11 @@ export const mockBuildConfig: Config = {
         ssrParameters: { ssrFunctionNodeVersion: '24.x' },
     },
     app: {
+        algolia: {
+            appId: '',
+            searchApiKey: '',
+            indexName: '',
+        },
         pages: {
             navigation: {
                 rootCategoryId: 'root',
