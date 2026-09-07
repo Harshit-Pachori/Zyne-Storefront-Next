@@ -58,6 +58,7 @@ export type BadgeDetail = {
 type DeepWritable<T> = T extends object ? { -readonly [K in keyof T]: DeepWritable<T[K]> } : T;
 
 export type AppConfig = {
+    algolia: any;
     auth: {
         otpLength: 6 | 8;
     };
