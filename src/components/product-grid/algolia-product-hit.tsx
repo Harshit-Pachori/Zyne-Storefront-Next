@@ -97,6 +97,8 @@ export default function AlgoliaProductHits({ hit }: { hit: Hit<ProductRecord> })
                         <div className="w-full h-full bg-muted" />
                     )}
                     <Link to={productUrl} className="absolute inset-0 z-[1] cursor-pointer" aria-hidden="true" tabIndex={-1} />
+                    {/* Hover overlay — subtle dark tint, matching ProductTile */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-opacity duration-300 pointer-events-none" />
                 </div>
             </div>
             <div className="relative p-4">

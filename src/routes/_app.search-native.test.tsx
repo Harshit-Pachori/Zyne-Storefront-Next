@@ -20,7 +20,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { MemoryRouter } from 'react-router';
 import type { ShopperExperience, ShopperSearch } from '@/scapi';
-import SearchPage, { loader, shouldRevalidate, type SearchPageData, SearchPageMetadata } from './_app.search';
+import SearchPage, { loader, shouldRevalidate, type SearchPageData, SearchPageMetadata } from './_app.search-native';
 import { shouldRevalidate as sharedShouldRevalidate } from '@/lib/revalidation/routes/category';
 import { createLoaderArgs, createTestContext } from '@/lib/test-utils';
 import { fetchSearchProducts } from '@/lib/api/search.server';
@@ -30,7 +30,7 @@ import type { AppConfig } from '@/types/config';
 import { getRegionDefinition } from '@/lib/decorators/region-definition';
 import { AllProvidersWrapper } from '@/test-utils/context-provider';
 import { useAnalytics } from '@/hooks/use-analytics';
-import type { Route } from './+types/_app.search';
+import type { Route } from './+types/_app.search-native';
 
 vi.mock('react-router', async (importOriginal) => {
     const actual = await importOriginal<typeof import('react-router')>();

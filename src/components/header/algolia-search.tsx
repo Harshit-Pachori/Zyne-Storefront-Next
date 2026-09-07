@@ -24,7 +24,7 @@ import {
 } from 'react-instantsearch';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import { useTranslation } from 'react-i18next';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { createAlgoliaClient } from '@/lib/algolia-client';
 import AlgoliaProductHits, {
     AlgoliaProductHitSkeleton,
@@ -69,18 +69,30 @@ function NoResults() {
 }
 
 /**
- * Hits grid, gated on InstantSearch's fetch `status` rather than `nbHits` alone: `nbHits` reads
- * as 0 both before the first response has arrived and after a genuine zero-result search, so
- * gating only on it would flash the "no products found" empty state on every load. Showing the
- * skeleton for the whole `loading`/`stalled` window (initial load AND every refinement/page
- * change) means `<Hits>` only ever renders once a response has actually settled.
+ * Hits grid. Shows the skeleton only until the FIRST response ever settles, then always renders
+ * `<Hits>`/`<Pagination>` from then on — including while later refinements are `loading`/
+ * `stalled` (Hits just updates its own contents in place once the new response arrives).
+ *
+ * Earlier this swapped between a skeleton `<div>` and `<Hits>` on every `loading`/`stalled`
+ * transition, which unmounts and remounts the `<Hits>` widget itself on every refinement.
+ * Unmounting an active react-instantsearch widget deregisters it from the underlying
+ * instantsearch.js instance and remounting re-registers it, and toggling a `RefinementList`
+ * checkbox down to zero selected values causes an unusually long `stalled` window (recomputing
+ * facet counts/ordering) — the combination produced a mount/unmount/re-register feedback loop
+ * that froze the tab. Keeping the widgets permanently mounted after their first render avoids it.
+ *
+ * `nbHits` (from `useStats`) is checked only once `hasSettledOnce` is true, since it reads 0 both
+ * before the first response arrives and after a genuine zero-result search.
  */
 function ResultsGrid() {
     const { status } = useInstantSearch();
     const { nbHits } = useStats();
-    const isLoading = status === 'loading' || status === 'stalled';
+    const hasSettledOnce = useRef(false);
+    if (status === 'idle') {
+        hasSettledOnce.current = true;
+    }
 
-    if (isLoading) {
+    if (!hasSettledOnce.current) {
         return (
             <div className={HITS_GRID_CLASS_NAMES}>
                 {Array.from({ length: SKELETON_COUNT }, (_, index) => (
@@ -90,12 +102,9 @@ function ResultsGrid() {
         );
     }
 
-    if (nbHits === 0) {
-        return <NoResults />;
-    }
-
     return (
         <>
+            {nbHits === 0 && <NoResults />}
             <Hits
                 hitComponent={AlgoliaProductHits}
                 classNames={{ list: HITS_GRID_CLASS_NAMES, item: 'contents' }}
