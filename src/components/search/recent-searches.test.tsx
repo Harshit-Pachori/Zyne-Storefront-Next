@@ -91,7 +91,7 @@ describe('RecentSearches Component', () => {
         const searchButton = screen.getByText('shoes');
         fireEvent.click(searchButton);
 
-        expect(mockCloseAndNavigate).toHaveBeenCalledWith('/search?q=shoes');
+        expect(mockCloseAndNavigate).toHaveBeenCalledWith('/algolia-search?q=shoes');
     });
 
     it('should call clearRecentSearches when clear button is clicked', () => {

@@ -538,21 +538,14 @@ export default defineConfig<Config>(
         headers: {
         ...defaultSecurityHeaders,
         csp: {
-          directives: {
-            ...defaultCspDirectives,
-            "connect-src": [
-              ...defaultCspDirectives["connect-src"]!,
-              "https://*.algolia.net",
-              "https://*.algolianet.com",
-            ],
-          },
+          directives: defaultCspDirectives,
         },
       },
       },
       algolia: {
-        appId: "S60KSPF0HF",
-        searchApiKey: "2d827503fdb0be30497752856b35df30",
-        indexName: "zyne_002_dx__RefArch__products__en_US",
+        appId: "",
+        searchApiKey: "",
+        indexName: "",
       },
     },
   },

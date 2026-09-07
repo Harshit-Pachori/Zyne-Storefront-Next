@@ -61,8 +61,11 @@ export const decodeBase64Url = (input: string) => {
 };
 
 /**
- * Builds a search URL with the given query
+ * Builds a search URL with the given query. Points at the Algolia-powered results page
+ * (`/algolia-search`), not the native SCAPI `/search` route — this is the single choke point
+ * every search entry point (header submit, recent searches, popular searches, phrase
+ * corrections) goes through, so repointing it here switches all of them at once.
  */
 export const searchUrlBuilder = (query: string): string => {
-    return `/search?q=${encodeURIComponent(query)}`;
+    return `/algolia-search?q=${encodeURIComponent(query)}`;
 };

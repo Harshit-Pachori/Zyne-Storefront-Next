@@ -34,7 +34,7 @@ import {
 import { UITarget } from '@/targets/ui-target';
 import { Component } from '@/lib/decorators/component';
 import { RegionDefinition } from '@/lib/decorators';
-import AlgoliaSearch from './algolia-search';;
+
 @Component('header', {
     name: 'Header',
     group: 'Layout',
@@ -62,9 +62,6 @@ interface HeaderProps extends PropsWithChildren {
 function LocationKeyedSearch() {
     const location = useLocation();
     return <Search key={`${location.pathname}${location.search}`} />;
-}
-function AlgoliaSearchResults() {
-    return <AlgoliaSearch />;
 }
 export default function Header({
     children,
@@ -150,7 +147,7 @@ export default function Header({
 
                     {/* Search - desktop only */}
                     <div className="hidden lg:block" data-testid="header-search-desktop">
-                        <AlgoliaSearchResults />
+                        <LocationKeyedSearch />
                     </div>
 
                     {/* Icons group - includes mobile hamburger */}
@@ -175,8 +172,7 @@ export default function Header({
 
                 {/* Mobile search - second row */}
                 <div className="pb-4 lg:hidden" data-testid="header-search-mobile">
-                    <AlgoliaSearchResults />
-                    {/* <LocationKeyedSearch/> */}
+                    <LocationKeyedSearch />
                 </div>
                 <UITarget targetId="sfcc.header.bnpl.banner" />
             </div>

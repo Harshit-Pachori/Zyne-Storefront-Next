@@ -58,7 +58,12 @@ export type BadgeDetail = {
 type DeepWritable<T> = T extends object ? { -readonly [K in keyof T]: DeepWritable<T[K]> } : T;
 
 export type AppConfig = {
-    algolia: any;
+    /** Algolia InstantSearch integration. Empty strings when unconfigured (integration inactive). */
+    algolia: {
+        appId: string;
+        searchApiKey: string;
+        indexName: string;
+    };
     auth: {
         otpLength: 6 | 8;
     };
