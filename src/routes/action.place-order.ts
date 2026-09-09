@@ -28,6 +28,7 @@ import { ApiError } from '@/scapi';
 // @sfdc-extension-line SFDC_EXT_MULTISHIP
 import { resolveEmptyShipments } from '@/extensions/multiship/lib/api/basket.server';
 import { getLogger } from '@/lib/logger.server';
+import { trackKlaviyoEvent } from '@/lib/klaviyo/track.server';
 import { ACTION_HOOK_IDS, runHookSafe } from '@/targets/action-hook.server';
 import {
     validatePlaceOrderPreconditions,
@@ -269,6 +270,20 @@ export async function action({ request, context }: Route.ActionArgs) {
             orderNo: order.orderNo,
             basketId: calculatedBasket.basketId,
         });
+
+        void trackKlaviyoEvent(
+            {
+                metric: 'Order Confirmation',
+                profile: { email: order.customerInfo?.email, externalId: getAuth(context).customerId },
+                value: order.orderTotal,
+                uniqueId: order.orderNo,
+                properties: {
+                    orderId: order.orderNo,
+                    itemCount: order.productItems?.length ?? 0,
+                },
+            },
+            logger
+        );
 
         // Extension hook: post-processing after order creation (e.g. capture, fulfillment triggers).
         // Order is already placed — never abort the action. Log at warn level with order

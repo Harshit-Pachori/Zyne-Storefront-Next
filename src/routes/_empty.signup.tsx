@@ -43,6 +43,7 @@ import { getLogger } from '@/lib/logger.server';
 import { getConfig } from '@salesforce/storefront-next-runtime/config';
 import { getPasswordlessErrorMessageKey, extractErrorMessage } from '@/lib/auth/error-handler';
 import { getLoginPreferences } from '@/lib/login-preferences.server';
+import { trackKlaviyoEvent } from '@/lib/klaviyo/track.server';
 
 const OtpModal = lazy(() => import('@/components/login/otp-modal'));
 
@@ -181,6 +182,14 @@ export async function action({ request, context }: Route.ActionArgs): Promise<Si
     }
 
     logger.info('Signup: registration succeeded');
+    void trackKlaviyoEvent(
+        {
+            metric: 'Signed Up',
+            profile: { email, externalId: getAuth(context).customerId },
+            properties: { source: 'signup_page' },
+        },
+        logger
+    );
 
     const { emailVerificationEnabled } = await getLoginPreferences(context);
     const isEmailVerificationEnabled = Boolean(emailVerificationEnabled);

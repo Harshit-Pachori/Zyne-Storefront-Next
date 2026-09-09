@@ -56,6 +56,8 @@ import {
     useFiltersPanelState,
 } from '@/hooks/use-filters-panel-state';
 import { getLogger } from '@/lib/logger.server';
+import { getAuth } from '@/middlewares/auth.server';
+import { trackKlaviyoEvent } from '@/lib/klaviyo/track.server';
 import { uiConfig } from '@/lib/config.ui';
 
 @PageType({
@@ -159,6 +161,18 @@ export async function loader(args: Route.LoaderArgs): Promise<CategoryPageData> 
             throw new Response(e.message, { status: e.status });
         }
         throw new Response('Internal Server Error', { status: 500 });
+    }
+
+    const viewedCategoryAuth = getAuth(context);
+    if (viewedCategoryAuth.customerId) {
+        void trackKlaviyoEvent(
+            {
+                metric: 'Viewed Category',
+                profile: { externalId: viewedCategoryAuth.customerId },
+                properties: { categoryId, categoryName: categoryData?.name },
+            },
+            logger
+        );
     }
 
     // Keep non-category refinements and apply exactly one category refinement.

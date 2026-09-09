@@ -66,6 +66,7 @@ Every variable the storefront recognizes is listed here. Set the **Required** ro
 |---|---|---|
 | `COMMERCE_API_SLAS_SECRET` | `src/lib/api-clients.server.ts`, `e2e/src/utils/scapi-helper.ts` | Required only with private-client SCAPI auth. |
 | `MARKETING_CLOUD_CLIENT_ID`, `MARKETING_CLOUD_CLIENT_SECRET`, `MARKETING_CLOUD_AUTH_BASE_URL`, `MARKETING_CLOUD_REST_BASE_URL` | Passwordless login email delivery | Required only when `passwordlessLogin.mode = 'email'` and you ship your own MC tenant. |
+| `KLAVIYO_PRIVATE_API_KEY` | `src/lib/klaviyo/track.server.ts` | Optional — server-side Klaviyo Events API tracking (login, add to cart, checkout, orders, signup). Create with `Events:Write` scope in Klaviyo > Settings > API Keys. Events are silently skipped if unset. |
 | `SCAPI_PROXY_HOST` | `vite-plugins/env-validation.ts`, `src/middlewares/app-config.server.ts` | Internal-developer-only override (workspace proxy). |
 
 ### Optional `PUBLIC__*` overrides (defaults in `config.server.ts`)

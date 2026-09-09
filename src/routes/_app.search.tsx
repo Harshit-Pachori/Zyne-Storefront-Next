@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router';
+import { useFetcher, useSearchParams } from 'react-router';
 import { SeoMeta } from '@/components/seo-meta';
 import AlgoliaSearchResults from '@/components/header/algolia-search';
 
@@ -30,6 +31,19 @@ export default function AlgoliaSearchPage() {
     const { t } = useTranslation('search');
     const [searchParams] = useSearchParams();
     const searchTerm = searchParams.get('q') ?? '';
+    const trackSearchFetcher = useFetcher();
+    const trackedTermRef = useRef<string | null>(null);
+
+    useEffect(() => {
+        if (!searchTerm || trackedTermRef.current === searchTerm) {
+            return;
+        }
+        trackedTermRef.current = searchTerm;
+        void trackSearchFetcher.submit({ q: searchTerm }, { method: 'post', action: '/action/track-search' });
+        // trackSearchFetcher is intentionally omitted: it's a new object each render and
+        // including it would resubmit on every render rather than only on a query change.
+        // oxlint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchTerm]);
 
     return (
         <>

@@ -23,6 +23,8 @@ import { createActionError } from '@/lib/action-error-helpers.server';
 import { ErrorCode } from '@/lib/error-codes';
 import { getLogger } from '@/lib/logger.server';
 import type { BasketActionResponse } from '@/routes/types/action-responses';
+import { getAuth } from '@/middlewares/auth.server';
+import { trackKlaviyoEvent } from '@/lib/klaviyo/track.server';
 
 type Basket = ShopperBasketsV2.schemas['Basket'];
 
@@ -38,6 +40,16 @@ export enum BasketAction {
     PromoCodeRemove = 'PromoCodeRemove',
     BonusProductAdd = 'BonusProductAdd',
 }
+
+/** Klaviyo metric name for basket actions worth tracking as commerce events. Actions absent from
+ * this map (updates, promo codes) don't fire a Klaviyo event. */
+const basketActionKlaviyoMetric: Partial<Record<BasketAction, string>> = {
+    [BasketAction.CartItemAdd]: 'Added to Cart',
+    [BasketAction.CartSetAdd]: 'Added to Cart',
+    [BasketAction.CartBundleAdd]: 'Added to Cart',
+    [BasketAction.BonusProductAdd]: 'Added to Cart',
+    [BasketAction.CartItemRemove]: 'Removed from Cart',
+};
 
 /** Shared params available to every basket action handler. */
 interface BaseHandlerParams {
@@ -193,6 +205,21 @@ export function createBasketAction<TInput>(
             const basketResult = result as Basket;
             updateBasketResource(context, basketResult);
             logger.info(`${action}: succeeded`);
+
+            const klaviyoMetric = basketActionKlaviyoMetric[action];
+            if (klaviyoMetric) {
+                const auth = getAuth(context);
+                void trackKlaviyoEvent(
+                    {
+                        metric: klaviyoMetric,
+                        profile: { email: basketResult.customerInfo?.email, externalId: auth.customerId },
+                        value: basketResult.productTotal,
+                        properties: { basketId: basketResult.basketId },
+                    },
+                    logger
+                );
+            }
+
             return data({ success: true, basket: basketResult });
         } catch (error) {
             logger.error(`${action}: failed`, { error });

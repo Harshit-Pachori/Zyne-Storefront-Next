@@ -43,6 +43,8 @@ import { generateProductSchema } from '@/utils/product-schema';
 import { getPublicOrigin } from '@/utils/schema-url';
 import { buildCanonicalUrl } from '@/utils/canonical-url';
 import { getLogger } from '@/lib/logger.server';
+import { getAuth } from '@/middlewares/auth.server';
+import { trackKlaviyoEvent } from '@/lib/klaviyo/track.server';
 import { UITarget } from '@/targets/ui-target';
 // @sfdc-extension-block-start SFDC_EXT_BOPIS
 import { selectedStoreContext } from '@/extensions/store-locator/middlewares/selected-store.server';
@@ -205,6 +207,20 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
 
     if (!product) {
         throw new Response('Product not found', { status: 404 });
+    }
+
+    // Guests have no identifier to attach a server-side event to (no email/customerId
+    // available without an extra SCAPI call) — only registered shoppers are tracked here.
+    const auth = getAuth(context);
+    if (auth.customerId) {
+        void trackKlaviyoEvent(
+            {
+                metric: 'Viewed Product',
+                profile: { externalId: auth.customerId },
+                properties: { productId: product.id, productName: product.name },
+            },
+            logger
+        );
     }
 
     const masterProductPromise = (() => {
