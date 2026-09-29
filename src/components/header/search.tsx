@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import Suggestions from '@/components/search/suggestions';
 import { useSearchSuggestions } from '@/hooks/use-search-suggestions';
 import { useTransformSearchSuggestions } from '@/hooks/use-transform-search-suggestions';
+import { useAlgoliaProductSuggestions } from '@/hooks/use-algolia-product-suggestions';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import { getSessionJSONItem, setSessionJSONItem, clearSessionJSONItem } from '@/lib/utils';
 import { searchUrlBuilder } from '@/lib/url';
@@ -56,6 +57,20 @@ export default function SearchBar(): ReactElement {
     });
 
     const transformedSuggestions = useTransformSearchSuggestions(suggestions);
+
+    // Product suggestions come from Algolia instead of SCAPI — categories, phrase corrections,
+    // and popular searches stay on `transformedSuggestions` above (Algolia's index has no
+    // equivalent for those). See `useAlgoliaProductSuggestions` for why this is scoped narrowly
+    // rather than adopting `react-instantsearch`'s full `Autocomplete` widget.
+    const { data: algoliaProductSuggestions } = useAlgoliaProductSuggestions({
+        query,
+        enabled: query.trim().length >= RECENT_SEARCH_MIN_LENGTH,
+    });
+
+    const mergedSuggestions = useMemo(() => {
+        if (!transformedSuggestions) return null;
+        return { ...transformedSuggestions, productSuggestions: algoliaProductSuggestions };
+    }, [transformedSuggestions, algoliaProductSuggestions]);
 
     useEffect(() => {
         queryRef.current = query;
@@ -99,10 +114,10 @@ export default function SearchBar(): ReactElement {
         }
         const recentSearches = getSessionJSONItem<string[]>(RECENT_SEARCH_KEY) || [];
         const searchSuggestionsAvailable =
-            transformedSuggestions &&
-            (transformedSuggestions.categorySuggestions.length > 0 ||
-                transformedSuggestions.productSuggestions.length > 0 ||
-                (transformedSuggestions.popularSearchSuggestions?.length ?? 0) > 0);
+            mergedSuggestions &&
+            (mergedSuggestions.categorySuggestions.length > 0 ||
+                mergedSuggestions.productSuggestions.length > 0 ||
+                (mergedSuggestions.popularSearchSuggestions?.length ?? 0) > 0);
 
         if (
             (document.activeElement === inputRef.current && recentSearches.length > 0) ||
@@ -112,7 +127,7 @@ export default function SearchBar(): ReactElement {
         } else {
             setShowSuggestions(false);
         }
-    }, [transformedSuggestions]);
+    }, [mergedSuggestions]);
 
     const handleInputChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,7 +175,7 @@ export default function SearchBar(): ReactElement {
 
     useEffect(() => {
         shouldOpenPopover();
-    }, [query, suggestions, shouldOpenPopover]);
+    }, [query, suggestions, algoliaProductSuggestions, shouldOpenPopover]);
 
     const handleContainerBlur = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
         // Close the panel only when focus leaves the whole search widget. Closing on the input's
@@ -241,7 +256,7 @@ export default function SearchBar(): ReactElement {
                             role="dialog"
                             aria-label={t('searchSuggestions')}>
                             <Suggestions
-                                searchSuggestions={transformedSuggestions}
+                                searchSuggestions={mergedSuggestions}
                                 recentSearches={getSessionJSONItem<string[]>(RECENT_SEARCH_KEY) || []}
                                 closeAndNavigate={closeAndNavigate}
                                 clearRecentSearches={clearRecentSearches}
