@@ -756,7 +756,17 @@ export default function App({
         <ComposeProviders providers={providers}>
             {passkeyEnabled ? <PasskeyRegistrationProvider>{innerTree}</PasskeyRegistrationProvider> : innerTree}
             {isCimulateEnabled(appConfig.cimulateAgent?.enabled) && (
-                <CimulateAgent cimulateConfiguration={appConfig.cimulateAgent} />
+                <CimulateAgent
+                    cimulateConfiguration={{
+                        ...appConfig.cimulateAgent,
+                        routingAttributes: {
+                            ...appConfig.cimulateAgent?.routingAttributes,
+                            ...(clientAuth?.usid ? { UsId: clientAuth.usid } : {}),
+                            ...(basketSnapshot?.basketId ? { BasketId: basketSnapshot.basketId } : {}),
+                        },
+                        isDevelopment: appConfig.environment === 'development',
+                    }}
+                />
             )}
             {isEmbeddedMessagingEnabled(appConfig.embeddedMessaging?.enabled) &&
                 validateEmbeddedMessagingConfig(appConfig.embeddedMessaging) && (

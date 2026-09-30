@@ -22,6 +22,8 @@ import { fetchSearchProducts } from '@/lib/api/search.server';
 import { getConfig, useConfig } from '@salesforce/storefront-next-runtime/config';
 import { siteContext } from '@salesforce/storefront-next-runtime/site-context';
 import { getLogger } from '@/lib/logger.server';
+import { getAuth } from '@/middlewares/auth.server';
+import { trackKlaviyoEvent } from '@/lib/klaviyo/track.server';
 import CategoryPagination from '@/components/category-pagination';
 import ActiveFilters from '@/components/category-refinements/active-filters';
 import FiltersButton from '@/components/category-refinements/filters-button';
@@ -122,6 +124,20 @@ export async function loader(args: Route.LoaderArgs): Promise<SearchPageData> {
         currency,
     });
     logger.info('Search: results loaded', { query: q, total: searchResultCritical.total, offset });
+
+    if (q) {
+        const searchAuth = getAuth(context);
+        if (searchAuth.customerId) {
+            void trackKlaviyoEvent(
+                {
+                    metric: 'Searched Site',
+                    profile: { externalId: searchAuth.customerId },
+                    properties: { searchTerm: q, resultCount: searchResultCritical.total },
+                },
+                logger
+            );
+        }
+    }
 
     const pageUrl = buildCanonicalUrl(requestUrl.origin, requestUrl.pathname, requestUrl.search);
     const effectiveCriticalCount = searchResultCritical.hits?.length ?? 0;

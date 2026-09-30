@@ -20,6 +20,7 @@ import { getTranslation } from '@salesforce/storefront-next-runtime/i18n';
 import { getLogger } from '@/lib/logger.server';
 import { getAuth } from '@/middlewares/auth.server';
 import { createApiClients } from '@/lib/api-clients.server';
+import { trackKlaviyoEvent } from '@/lib/klaviyo/track.server';
 import {
     saveShippingAddressToCustomer,
     saveBillingAddressToCustomer,
@@ -82,6 +83,14 @@ export async function action({ request, context }: Route.ActionArgs): Promise<Po
     }
 
     logger.info('PostOrderRegister: registration succeeded', { email });
+    void trackKlaviyoEvent(
+        {
+            metric: 'Signed Up',
+            profile: { email, externalId: getAuth(context).customerId },
+            properties: { source: 'post_order_checkout' },
+        },
+        logger
+    );
 
     // After registration + auto-login, save order data to the new customer profile
     if (orderNo) {
