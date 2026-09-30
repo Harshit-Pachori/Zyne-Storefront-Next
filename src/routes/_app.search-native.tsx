@@ -132,7 +132,7 @@ export async function loader(args: Route.LoaderArgs): Promise<SearchPageData> {
                 {
                     metric: 'Searched Site',
                     profile: { externalId: searchAuth.customerId },
-                    properties: { searchTerm: q, resultCount: searchResultCritical.total },
+                    properties: { "Search Term": q, "Search Results Count": searchResultCritical.total },
                 },
                 logger
             );

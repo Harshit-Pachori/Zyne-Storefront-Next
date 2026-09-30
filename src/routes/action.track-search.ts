@@ -29,6 +29,7 @@ export async function action({ request, context }: Route.ActionArgs): Promise<{ 
     const logger = getLogger(context);
     const formData = await request.formData();
     const searchTerm = formData.get('q')?.toString().trim();
+    const resultsCount = parseInt(formData.get('count')?.toString() ?? '0', 10) || 0;
 
     if (!searchTerm) {
         return { success: false };
@@ -40,7 +41,11 @@ export async function action({ request, context }: Route.ActionArgs): Promise<{ 
     }
 
     void trackKlaviyoEvent(
-        { metric: 'Searched Site', profile: { externalId: auth.customerId }, properties: { searchTerm } },
+        {
+            metric: 'Searched Site',
+            profile: { externalId: auth.customerId },
+            properties: { 'Search Term': searchTerm, 'Search Results Count': resultsCount },
+        },
         logger
     );
 

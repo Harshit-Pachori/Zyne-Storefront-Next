@@ -169,7 +169,7 @@ export async function loader(args: Route.LoaderArgs): Promise<CategoryPageData> 
             {
                 metric: 'Viewed Category',
                 profile: { externalId: viewedCategoryAuth.customerId },
-                properties: { categoryId, categoryName: categoryData?.name },
+                properties: { SiteID: siteCtx?.site.id, external_catalog_id:siteCtx?.site.id, "Viewed Category Id": categoryId, "Viewed Category Name": categoryData?.name },
             },
             logger
         );
