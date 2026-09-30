@@ -230,7 +230,7 @@ export default function SearchBar(): ReactElement {
                                     id={searchInputId}
                                     type="text"
                                     placeholder={t('searchPlaceholder')}
-                                    className="w-full pl-10 focus-visible:border-header-foreground focus-visible:ring-1 focus-visible:ring-header-foreground"
+                                    className="w-full placeholder:text-white/70 pl-10 focus-visible:border-header-foreground focus-visible:ring-1 focus-visible:ring-header-foreground"
                                     onChange={handleInputChange}
                                     onFocus={shouldOpenPopover}
                                     aria-autocomplete="list"
