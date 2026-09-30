@@ -29,6 +29,7 @@ interface Suggestion {
     link: string;
     image?: string;
     price?: number;
+    currency?: string;
 }
 
 interface SearchSuggestionsPopupProps {
@@ -62,7 +63,7 @@ const SearchSuggestionsPopup: React.FC<SearchSuggestionsPopupProps> = ({
 
     return (
         <div data-testid="sf-horizontal-product-suggestions" className="overflow-hidden">
-            <div className="flex gap-4 overflow-x-hidden pb-2">
+            <div className="flex gap-6 overflow-x-hidden pb-2">
                 {suggestions.map((suggestion) => (
                     <Link
                         data-testid="product-tile"
@@ -73,7 +74,7 @@ const SearchSuggestionsPopup: React.FC<SearchSuggestionsPopupProps> = ({
                         <div className="w-full">
                             {/* Product Image */}
                             <div className="mb-2">
-                                <div className="w-full relative aspect-[4/3]">
+                                <div className="w-full relative aspect-[3/4]">
                                     {suggestion.image ? (
                                         <DynamicImage
                                             src={`${toImageUrl({ src: suggestion.image, config })}[?sw={width}]`}
@@ -94,12 +95,12 @@ const SearchSuggestionsPopup: React.FC<SearchSuggestionsPopupProps> = ({
                                 </div>
                             </div>
 
-                            <p className="text-sm font-medium text-header-foreground mb-1 line-clamp-2">
+                            <p className="text-sm font-medium text-foreground mb-1 line-clamp-2 hover:underline">
                                 {suggestion.name}
                             </p>
 
                             {suggestion.price && (
-                                <p className="text-sm font-medium text-header-foreground">
+                                <p className="text-sm font-medium text-foreground">
                                     {formatCurrency(suggestion.price, i18n.language, currency)}
                                 </p>
                             )}
