@@ -207,7 +207,7 @@ describe('SearchSuggestionsSection Component', () => {
             expect(categoriesHeaders).toHaveLength(2);
         });
 
-        it('should render products section in mobile layout', () => {
+        it('should render products section header in both mobile and desktop layouts', () => {
             renderWithRouter(
                 <SearchSuggestionsSection
                     searchSuggestions={mockSearchSuggestions}
@@ -215,8 +215,11 @@ describe('SearchSuggestionsSection Component', () => {
                 />
             );
 
+            // Both layouts are mounted simultaneously (toggled via CSS, not conditional
+            // rendering) — the desktop products grid also gets a "Products" header now,
+            // for parity with the mobile layout's grouped sections.
             const productsHeaders = screen.getAllByText('Products');
-            expect(productsHeaders).toHaveLength(1); // Only in mobile layout
+            expect(productsHeaders).toHaveLength(2);
         });
     });
 

@@ -21,6 +21,11 @@ import { DynamicImage } from '@/components/dynamic-image';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { routes, routeHref } from '@/route-paths';
+import {
+    type AlgoliaProductRecord,
+    findAlgoliaImage,
+    resolveAlgoliaProductId,
+} from '@/lib/product/algolia-product';
 
 const HIT_IMAGE_WIDTHS = [200, 400];
 
@@ -40,45 +45,16 @@ export function AlgoliaProductHitSkeleton() {
 }
 
 /**
- * Shape of a product record as indexed by the SFCC Algolia connector (bm_algolia /
- * int_algolia cartridges) — confirmed against a live query against
- * `zyne_002_dx__RefArch__products__en_US`. Prices live per-variant, not at the top level;
- * images are grouped by `view_type`. Doesn't carry the full SCAPI `ProductSearchHit` shape
- * (variation attributes, badges, ratings, inventory), so this tile mirrors `ProductTile`'s
- * visual language rather than reusing it — reusing it would wire Quick Add/wishlist to data
- * that isn't there.
- *
- * `objectID` is Algolia's own key, NOT a real SCAPI product id for variation groups — it's a
- * `<masterId>-<colorCode>`-style composite the connector invents, and no `master`/`masterId`
- * field is indexed to recover the real master id from it. `fetchProductById` 404s on it.
- * `variants[].variantID` / `defaultVariantID`, however, ARE real SCAPI variant product ids
- * (same id shape used by `?pid=` on the home/PLP tiles) and resolve directly with no `pid`
- * needed. Standalone (non-variation) products have null variantID/defaultVariantID and use
- * `objectID` as their real id.
+ * Doesn't carry the full SCAPI `ProductSearchHit` shape (variation attributes, badges,
+ * ratings, inventory), so this tile mirrors `ProductTile`'s visual language rather than
+ * reusing it — reusing it would wire Quick Add/wishlist to data that isn't there.
  */
-interface ProductRecord {
-    name: string;
-    defaultVariantID?: string | null;
-    image_groups?: Array<{
-        view_type: string;
-        images: Array<{ dis_base_link: string; alt?: string }>;
-    }>;
-    variants?: Array<{
-        variantID?: string | null;
-        price?: Record<string, number>;
-    }>;
-}
-
-function findImage(imageGroups: ProductRecord['image_groups'], viewType: string): string | undefined {
-    return imageGroups?.find((group) => group.view_type === viewType)?.images[0]?.dis_base_link;
-}
-
-export default function AlgoliaProductHits({ hit }: { hit: Hit<ProductRecord> }) {
+export default function AlgoliaProductHits({ hit }: { hit: Hit<AlgoliaProductRecord> }) {
     const config = useConfig();
     const { currency } = useSite();
-    const imageUrl = findImage(hit.image_groups, 'large') ?? findImage(hit.image_groups, 'small');
+    const imageUrl = findAlgoliaImage(hit.image_groups, 'large') ?? findAlgoliaImage(hit.image_groups, 'small');
     const price = hit.variants?.[0]?.price?.[currency];
-    const productId = hit.variants?.[0]?.variantID ?? hit.defaultVariantID ?? hit.objectID;
+    const productId = resolveAlgoliaProductId(hit);
     const productUrl = routeHref(routes.product, { productId });
 
     return (
