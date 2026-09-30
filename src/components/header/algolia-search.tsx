@@ -24,7 +24,8 @@ import {
 } from 'react-instantsearch';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import { useTranslation } from 'react-i18next';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useFetcher } from 'react-router';
 import { createAlgoliaClient } from '@/lib/algolia-client';
 import AlgoliaProductHits, {
     AlgoliaProductHitSkeleton,
@@ -66,6 +67,44 @@ function NoResults() {
             <p className="text-sm text-muted-foreground">{t('noProductsFound')}</p>
         </div>
     );
+}
+
+/**
+ * Fires the "Searched Site" Klaviyo event once results settle for a given query, so the real
+ * `nbHits` (unavailable outside this `<InstantSearch>` subtree) can be reported instead of 0.
+ *
+ * `status` defaults to `'idle'` before any request has ever been made (not just once one
+ * completes), so an `idle` check alone fires immediately on mount with `nbHits` still 0. Waiting
+ * to see a `loading`/`stalled` status first for the current query guarantees a real response
+ * came back before tracking.
+ */
+function SearchResultsTracker({ query }: { query: string }) {
+    const { status } = useInstantSearch();
+    const { nbHits } = useStats();
+    const trackSearchFetcher = useFetcher();
+    const trackedQueryRef = useRef<string | null>(null);
+    const hasRequestedRef = useRef(false);
+
+    useEffect(() => {
+        if (status === 'loading' || status === 'stalled') {
+            hasRequestedRef.current = true;
+            return;
+        }
+        if (!query || status !== 'idle' || !hasRequestedRef.current || trackedQueryRef.current === query) {
+            return;
+        }
+        trackedQueryRef.current = query;
+        hasRequestedRef.current = false;
+        void trackSearchFetcher.submit(
+            { q: query, count: String(nbHits) },
+            { method: 'post', action: '/action/track-search' }
+        );
+        // trackSearchFetcher is intentionally omitted: it's a new object each render and
+        // including it would resubmit on every render rather than only on a query/status change.
+        // oxlint-disable-next-line react-hooks/exhaustive-deps
+    }, [query, status, nbHits]);
+
+    return null;
 }
 
 /**
@@ -127,6 +166,7 @@ export default function AlgoliaSearchResults({ initialQuery = '' }: { initialQue
                 landed on via the URL), so nothing else owns the `query` UI state — Configure sets
                 it as a raw Algolia search parameter instead. */}
             <Configure query={initialQuery} />
+            <SearchResultsTracker query={initialQuery} />
             <ResultsHeading query={initialQuery} />
             <div className="flex flex-col lg:flex-row gap-8">
                 <aside className="w-full lg:w-64 lg:flex-shrink-0">

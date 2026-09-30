@@ -217,7 +217,7 @@ export async function loader(args: Route.LoaderArgs): Promise<ProductPageData> {
             {
                 metric: 'Viewed Product',
                 profile: { externalId: auth.customerId },
-                properties: { productId: product.id, productName: product.name },
+                properties: { 'Product Name': product.name, 'Product Page URL': product.slugUrl, 'Product Image': product.imageGroups?.[0]?.images?.[0]?.link, 'Price': product.price, 'Price String': product.price,'Product UPC': product.upc, SiteID: siteCtx?.site.id, value: product.price },
             },
             logger
         );
