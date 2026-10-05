@@ -20,6 +20,7 @@ import generatedExtensionConfig from "./src/extensions/config/index";
 // the AST validator forbids process.env, so server-only secrets must be read from process.env
 // in a route handler.
 import generatedServerExtensionConfig from "./src/extensions/config/server";
+import { defaultCspDirectives } from "@salesforce/storefront-next-runtime/security";
 
 const DIS_DEFAULT_HOST = "https://edge.disstg.commercecloud.salesforce.com";
 
@@ -32,8 +33,24 @@ export default defineConfig<Config>(
     runtime: {
       defaultMrtProject: "",
       defaultMrtTarget: "",
-      ssrOnly: [],
-      ssrShared: [],
+      // docs/README-CONFIG-OPTIONS.md lists the default as ['loader.js', 'ssr.js', ...], but
+      // this version of the build actually emits `streamingHandler.mjs` (confirmed in
+      // build/ output), not `ssr.js` — adjusted to match what's really produced.
+      ssrOnly: ["loader.js", "streamingHandler.mjs", "!static/**/*"],
+      ssrShared: [
+        "static/**/*",
+        "**/*.css",
+        "**/*.png",
+        "**/*.jpg",
+        "**/*.jpeg",
+        "**/*.gif",
+        "**/*.svg",
+        "**/*.ico",
+        "**/*.woff",
+        "**/*.woff2",
+        "**/*.ttf",
+        "**/*.eot",
+      ],
       ssrParameters: {
         ssrFunctionNodeVersion: "24.x",
         envBasePath: "",
@@ -472,30 +489,12 @@ export default defineConfig<Config>(
         },
       },
       development: { enableDevtools: true, hotReload: true, strictMode: true },
-      cimulateAgent: {
-        enabled: false,
-        commerceClientScriptSourceUrl: "URL_Redacted",
-        scrt2Url:
-          "https://orgfarm-a3ef1014a8-dev-ed.develop.my.salesforce-scrt.com",
-        salesforceOrgId: "00Dfj00000IxfuR",
-        esDeveloperName: "Zyne_Headless_Storefront",
-        commerceClientElementId: "cimulate-messaging-container",
-        commerceClientDisplayMode: "panel" as const,
-      },
+      cimulateAgent: JSON.parse(process.env.PUBLIC__app__cimulateAgent || "{}"),
       // Free, native alternative to cimulateAgent above — no third-party vendor
       // script required. See src/components/embedded-messaging/README.md.
-      embeddedMessaging: {
-        enabled: true,
-        orgId: "00Dfj00000IxfuR",
-        esDeveloperName: "Customer_Support_Service",
-        siteUrl:
-          "https://orgfarm-a3ef1014a8-dev-ed.develop.my.site.com/ESWCustomerSupportServi1787744978578",
-        scrt2Url:
-          "https://orgfarm-a3ef1014a8-dev-ed.develop.my.salesforce-scrt.com",
-        bootstrapScriptUrl:
-          "https://orgfarm-a3ef1014a8-dev-ed.develop.my.site.com/ESWCustomerSupportServi1787744978578/assets/js/bootstrap.min.js",
-        language: "en_US",
-      },
+      embeddedMessaging: JSON.parse(
+        process.env.PUBLIC__app__embeddedMessaging || "{}",
+      ),
       extension: generatedExtensionConfig,
       serverExtension: generatedServerExtensionConfig,
       url: {
@@ -534,7 +533,17 @@ export default defineConfig<Config>(
                 | "disabled") || undefined,
           },
         },
-        headers: defaultSecurityHeaders,
+        headers: {
+        ...defaultSecurityHeaders,
+        csp: {
+          directives: defaultCspDirectives,
+        },
+      },
+      },
+      algolia: {
+        appId: "",
+        searchApiKey: "",
+        indexName: "",
       },
     },
   },

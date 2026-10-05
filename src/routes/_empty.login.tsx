@@ -38,6 +38,7 @@ import { updateBasketResource } from '@/middlewares/basket.server';
 import { buildUrlFromContext } from '@/lib/url.server';
 import { TurnstileWidget } from '@/components/security/turnstile-widget';
 import { getTurnstileSiteKey, getTurnstileMode, isTurnstileEnabled } from '@/lib/turnstile/utils';
+import { trackKlaviyoEvent } from '@/lib/klaviyo/track.server';
 
 // services
 import {
@@ -345,6 +346,10 @@ export async function action({ request, context }: Route.ActionArgs): Promise<Lo
             }
 
             logger.info('Login: standard login succeeded');
+            void trackKlaviyoEvent(
+                { metric: 'Logged In', profile: { email, externalId: getAuth(context).customerId } },
+                logger
+            );
             // Login successful - merge basket on server before redirecting
             let mergedBasket: Awaited<ReturnType<typeof mergeBasket>> | undefined;
             try {

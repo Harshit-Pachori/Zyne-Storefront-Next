@@ -15,6 +15,18 @@
         {
             "name": "Site ID",
             "key": "PUBLIC__app__defaultSiteId"
+        },
+        {
+            "name": "Algolia App ID",
+            "key": "PUBLIC__app__algolia__appId"
+        },
+        {
+            "name": "Algolia Search API Key",
+            "key": "PUBLIC__app__algolia__searchApiKey"
+        },
+        {
+            "name": "Algolia Index Name",
+            "key": "PUBLIC__app__algolia__indexName"
         }
     ]
 }

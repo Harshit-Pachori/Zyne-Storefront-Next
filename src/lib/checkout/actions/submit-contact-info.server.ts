@@ -15,7 +15,7 @@
  */
 import type { ActionFunctionArgs } from 'react-router';
 import { ensureBasketId, updateBasketResource } from '@/middlewares/basket.server';
-import { authorizePasswordless } from '@/middlewares/auth.server';
+import { authorizePasswordless, getAuth } from '@/middlewares/auth.server';
 import { createApiClients } from '@/lib/api-clients.server';
 import { createActionError } from '@/lib/action-error-helpers.server';
 import { ErrorCode } from '@/lib/error-codes';
@@ -25,6 +25,7 @@ import { getTranslation } from '@salesforce/storefront-next-runtime/i18n';
 import { getLogger } from '@/lib/logger.server';
 import { getLoginPreferences } from '@/lib/login-preferences.server';
 import { ACTION_HOOK_IDS, runHookSafe } from '@/targets/action-hook.server';
+import { trackKlaviyoEvent } from '@/lib/klaviyo/track.server';
 
 /**
  * Server action for submitting checkout contact information.
@@ -139,6 +140,18 @@ export async function action(formData: FormData, context: ActionFunctionArgs['co
     if (hookResult.errorResponse) return hookResult.errorResponse;
 
     logger.info('SubmitContactInfo: succeeded', { basketId });
+    void trackKlaviyoEvent(
+        {
+            metric: 'Started Checkout',
+            profile: { email, externalId: getAuth(context).customerId },
+            value: updatedBasket?.orderTotal ?? undefined,
+            // Dedupe key: contact info can be re-submitted multiple times per checkout
+            // (e.g. shopper edits email), so key on basketId rather than firing once per submit.
+            uniqueId: `started-checkout-${basketId}`,
+            properties: { basketId },
+        },
+        logger
+    );
 
     return Response.json({
         success: true,

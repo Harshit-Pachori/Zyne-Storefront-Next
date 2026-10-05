@@ -20,12 +20,15 @@ import { useAnalytics } from '@/hooks/use-analytics';
 import { toImageUrl } from '@/lib/images/dynamic-image';
 import { useConfig } from '@salesforce/storefront-next-runtime/config';
 import { useTranslation } from 'react-i18next';
+import { formatCurrency } from '@/lib/currency';
+import { useSite } from '@salesforce/storefront-next-runtime/site-context';
 
 interface Suggestion {
     name: string;
     link: string;
     type: string;
     image?: string;
+    price?: number;
     parentCategoryName?: string;
 }
 
@@ -39,7 +42,8 @@ interface SuggestionsProps {
 const Suggestions: React.FC<SuggestionsProps> = ({ suggestions, searchPhrase, closeAndNavigate, className }) => {
     const analytics = useAnalytics();
     const config = useConfig();
-    const { t } = useTranslation('common');
+    const { t, i18n } = useTranslation('common');
+        const { currency } = useSite();
     if (!suggestions || suggestions.length === 0) {
         return null;
     }
@@ -63,10 +67,10 @@ const Suggestions: React.FC<SuggestionsProps> = ({ suggestions, searchPhrase, cl
                         type="button"
                         data-slot="suggestion"
                         onClick={() => handleClick(suggestion)}
-                        className="w-full flex justify-start items-center pl-4 py-0 hover:bg-accent hover:text-foreground transition-colors text-sm mt-0">
+                        className="w-full flex justify-start items-center pl-4 py-2 hover:bg-accent hover:text-foreground transition-colors text-sm mt-0">
                         <div className="flex items-center">
                             {suggestion.image && (
-                                <div className="w-10 h-8 mr-4 rounded-full bg-transparent flex items-center justify-center overflow-hidden shrink-0">
+                                <div className="w-12 h-12 mr-4 rounded-full bg-transparent flex items-center justify-center overflow-hidden shrink-0">
                                     <DynamicImage
                                         src={`${toImageUrl({ src: suggestion.image, config })}[?sw={width}]`}
                                         alt={suggestion.name || t('suggestionImageAlt')}
@@ -79,7 +83,12 @@ const Suggestions: React.FC<SuggestionsProps> = ({ suggestions, searchPhrase, cl
                                 </div>
                             )}
                             <div className="text-left">
-                                <span className="text-sm font-medium">{suggestion.name}</span>
+                                <span className="text-sm font-medium hover:underline">{suggestion.name}</span>
+                                {suggestion.price && (
+                                        <p className="text-sm text-foreground font-medium">
+                                            {formatCurrency(suggestion.price, i18n.language, currency)}
+                                        </p>
+                                    )}
                             </div>
                         </div>
                     </button>

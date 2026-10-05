@@ -191,11 +191,16 @@ export default function SuggestionSection({ searchSuggestions, closeAndNavigate 
 
                 <div className="flex-[3] min-w-0 overflow-hidden">
                     {hasProducts && (
-                        <SuggestionsGrid
-                            closeAndNavigate={closeAndNavigate}
-                            suggestions={searchSuggestions?.productSuggestions}
-                            searchPhrase={searchPhrase}
-                        />
+                        <div className="mb-2">
+                            <div className="text-sm font-semibold text-muted-foreground tracking-wide mb-2">
+                                {t('suggestions.products')}
+                            </div>
+                            <SuggestionsGrid
+                                closeAndNavigate={closeAndNavigate}
+                                suggestions={searchSuggestions?.productSuggestions}
+                                searchPhrase={searchPhrase}
+                            />
+                        </div>
                     )}
                 </div>
 

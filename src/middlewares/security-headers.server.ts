@@ -19,6 +19,7 @@ import { getConfig } from '@salesforce/storefront-next-runtime/config';
 import { createCimulateCspContributor } from './csp-contributors/cimulate.js';
 import { createEmbeddedMessagingCspContributor } from './csp-contributors/embedded-messaging.js';
 import { createData360CspContributor } from './csp-contributors/data360.js';
+import { createAlgoliaCspContributor } from './csp-contributors/algolia.js';
 
 let middleware: MiddlewareFunction<Response> | null = null;
 
@@ -36,6 +37,7 @@ export const securityHeadersMiddleware: MiddlewareFunction<Response> = async (ar
             createCimulateCspContributor(config.cimulateAgent),
             createEmbeddedMessagingCspContributor(config.embeddedMessaging),
             createData360CspContributor(config.engagement?.adapters?.data360),
+            createAlgoliaCspContributor(config.algolia),
         ];
         middleware = createSecurityHeadersMiddleware(config.security?.headers ?? {}, contributors);
     }
