@@ -33,8 +33,24 @@ export default defineConfig<Config>(
     runtime: {
       defaultMrtProject: "",
       defaultMrtTarget: "",
-      ssrOnly: [],
-      ssrShared: [],
+      // docs/README-CONFIG-OPTIONS.md lists the default as ['loader.js', 'ssr.js', ...], but
+      // this version of the build actually emits `streamingHandler.mjs` (confirmed in
+      // build/ output), not `ssr.js` — adjusted to match what's really produced.
+      ssrOnly: ["loader.js", "streamingHandler.mjs", "!static/**/*"],
+      ssrShared: [
+        "static/**/*",
+        "**/*.css",
+        "**/*.png",
+        "**/*.jpg",
+        "**/*.jpeg",
+        "**/*.gif",
+        "**/*.svg",
+        "**/*.ico",
+        "**/*.woff",
+        "**/*.woff2",
+        "**/*.ttf",
+        "**/*.eot",
+      ],
       ssrParameters: {
         ssrFunctionNodeVersion: "24.x",
         envBasePath: "",
