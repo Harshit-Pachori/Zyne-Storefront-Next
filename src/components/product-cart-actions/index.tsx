@@ -188,7 +188,7 @@ export default function ProductCartActions({
                 )}
 
                 {/* Express Payments — standard layout only, vertical for PDP */}
-                {!isCompactAddMode &&
+                {/* {!isCompactAddMode &&
                     !isProductASet &&
                     !isProductABundle &&
                     !isEditMode &&
@@ -203,7 +203,7 @@ export default function ProductCartActions({
                                 />
                             </Suspense>
                         </UITarget>
-                    )}
+                    )} */}
 
                 <UITarget targetId="sfcc.pdp.after.addToCart" />
                 {!isCompactAddMode && !isEditMode && currentProductId && <UITarget targetId="sfcc.pdp.bnpl.message" />}

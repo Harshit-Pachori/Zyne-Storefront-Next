@@ -1045,14 +1045,14 @@ export default function CheckoutFormPage({
                     <div className="space-y-6 md:order-2 lg:order-1 lg:col-span-2 [&_[data-slot=card-header].border-b]:pb-4">
                         <UITarget targetId="sfcc.checkout.mainContent.before" />
                         {/* Express Payments - Apple Pay, Google Pay, Amazon Pay, PayPal & Venmo (mobile only) */}
-                        <UITarget targetId="sfcc.checkout.expressPayments.header.before" />
+                        {/* <UITarget targetId="sfcc.checkout.expressPayments.header.before" />
                         <Suspense fallback={<ExpressPaymentsSkeleton />}>
                             <UITarget targetId="sfcc.checkout.expressPayments.before" />
                             <UITarget targetId="sfcc.checkout.expressPayments">
                                 <ExpressPayments separatorText={t('expressPayments.separator')} />
                             </UITarget>
                             <UITarget targetId="sfcc.checkout.expressPayments.after" />
-                        </Suspense>
+                        </Suspense> */}
 
                         <UITarget targetId="sfcc.checkout.contactInfo.header.before" />
                         <Suspense fallback={<ContactInfoSkeleton />}>
